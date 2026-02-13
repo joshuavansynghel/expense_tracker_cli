@@ -8,5 +8,5 @@ class Expense:
         self.category = category
         self.description = description
 
-    # def __str__(self):
-    #     print(f"Purchased {self.description} for €{self.amount} on {self.date}")
+    def __str__(self):
+        return f"{self.date} | €{self.amount:.2f} | {self.category} | {self.description}"
