@@ -9,11 +9,12 @@ def main():
     expenses = []
 
     while True:
-        print("What would you like to do?")
+        print("\nWhat would you like to do?\n")
         choice = input(
             "Type 'add' to add an expense\n"
             "Type 'view' to view allexpenses\n"
-            "Type 'filter' to filter on specific expenses"
+            "Type 'filter' to filter on specific expenses\n"
+            "Type 'quit' to quit the application\n"
         )
 
         match choice:
@@ -23,7 +24,11 @@ def main():
                 print_expenses(expenses)
             case "filter":
                 category_choice = input("Choose a category to filter on: ")
-                print_expenses(filter_expenses(expenses, category_choice))
+                filtered_expenses = filter_expenses(expenses,category_choice)
+                print_expenses(filtered_expenses)
+            case "quit":
+                return
+            
 
 
 def add_expense():
