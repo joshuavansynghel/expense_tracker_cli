@@ -1,28 +1,36 @@
 from models.expense import Expense
 from utils.validation import validate_date, validate_amount
 
-def add_expense():
-    # Amount input
-    amount_text = input("What is the amount of the expense in euros?: ")
-    amount = validate_amount(amount_text)
+class ExpenseService:
+    def __init__(self):
+        self.expenses = []
 
-    date_text = input("What is the date of the expense?: ")
-    dt = validate_date(date_text)
+    def get_expenses(self):
+        return self.expenses
 
-    category_text = input("What is the category of the expense?: ")
-    description_text = input("What is the description of the expense?: ")
+    def add_expense(self):
+        # Amount input
+        amount_text = input("What is the amount of the expense in euros?: ")
+        amount = validate_amount(amount_text)
 
-    return Expense(amount, dt, category_text, description_text)
+        date_text = input("What is the date of the expense?: ")
+        dt = validate_date(date_text)
 
+        category_text = input("What is the category of the expense?: ")
+        description_text = input("What is the description of the expense?: ")
 
-def filter_expenses(expenses, category):
-    filtered_expenses = []
+        expense = Expense(amount, dt, category_text, description_text)
 
-    for expense in expenses:
-        if expense.category == category:
-            filtered_expenses.append(expense)
+        self.expenses.append(expense)
 
-    return filtered_expenses
+    def filter_expenses(self, category):
+        filtered_expenses = []
 
-def calculate_summary(expenses):
-    return sum(e.amount for e in expenses)
+        for expense in self.expenses:
+            if expense.category == category:
+                filtered_expenses.append(expense)
+
+        return filtered_expenses
+
+    def calculate_summary(self, expenses):
+        return sum(e.amount for e in expenses)
