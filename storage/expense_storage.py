@@ -1,21 +1,26 @@
 import os
 import json
 
+from pathlib import Path
+
 class ExpenseStorage:
 
-    def __init__(self, file_path="../data"):
-        self.file_path = file_path
+    def __init__(self, file_path="../data/expenses.json"):
+        self.file_path = Path(file_path)
 
     def store_expenses(self, expenses):
-        file_location = os.path.join(self.file_path, "expenses.json")
+         # Ensure directory exists
+         self.file_path.parent.mkdir(parents=True, exist_ok=True)
 
-        with open(file_location, "w") as f:
-            json.dump(expenses, f)
+         with self.file_path.open("w") as f:
+             json.dump(expenses, f)
 
-    def load_expenses(self):
-        file_location = os.path.join(self.file_path, "expenses.json")
+    def load_expenses(self, default=None):
+        if default == None:
+            default = []
 
-        with open(file_location, "r") as f:
-            expenses = json.load(f)
-
-        return expenses
+        try:
+            with self.file_path.open("r") as f:
+                return json.load(f)
+        except FileNotFoundError:
+            return default

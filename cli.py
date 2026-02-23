@@ -1,5 +1,6 @@
 from services.expense_service import ExpenseService
 from utils.formatter import print_expenses
+from utils.validation import validate_date, validate_amount
 
 def main():
 
@@ -19,7 +20,17 @@ def main():
 
         match choice:
             case "add":
-                expense_service.add_expense()
+                # Ask user for input and validate 
+                amount_text = input("What is the amount of the expense in euros?: ")
+                amount = validate_amount(amount_text)
+
+                date_text = input("What is the date of the expense?: ")
+                dt = validate_date(date_text)
+
+                category_text = input("What is the category of the expense?: ")
+                description_text = input("What is the description of the expense?: ")
+
+                expense_service.add_expense(amount, dt, category_text, description_text)
 
             case "view":
                 print_expenses(expense_service.get_expenses())
