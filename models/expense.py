@@ -1,5 +1,7 @@
 from datetime import date
 
+from utils.validation import validate_amount, validate_date
+
 class Expense:
     def __init__(self, amount:float, date:date, category:str, description:str) -> None:
         self.amount = amount
@@ -11,16 +13,16 @@ class Expense:
     def to_dict(self):
         return {
             'amount': self.amount,
-            'date': self.date,
+            'date': self.date.isoformat(),
             'category': self.category,
             'description': self.description
         }
 
-
-    def from_dict(self, dict):
+    @classmethod
+    def from_dict(cls, dict):
         return Expense(
-            dict['amount'],
-            dict['date'],
+            validate_amount(dict['amount']),
+            validate_date(dict['date']),
             dict['category'],
             dict['description']
         )

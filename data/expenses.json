@@ -1,0 +1,14 @@
+[
+    {
+        "amount": 150.0,
+        "date": "2025-05-02T00:00:00",
+        "category": "Entertainment",
+        "description": "Playstation subscription"
+    },
+    {
+        "amount": 50.0,
+        "date": "2025-01-16T00:00:00",
+        "category": "Groceries",
+        "description": "Food"
+    }
+]
