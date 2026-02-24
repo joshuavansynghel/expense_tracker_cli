@@ -3,7 +3,7 @@ from models.expense import Expense
 class FakeStorage:
 
     def __init__(self):
-        self.expenses = self.create_mock_data()
+        self.expenses = []
 
     def _create_mock_data(self):
         expenses = []
