@@ -1,6 +1,7 @@
-from services.expense_service import ExpenseService
-from utils.formatter import print_expenses
-from utils.validation import validate_date, validate_amount
+from expense_tracker.services.expense_service import ExpenseService
+from expense_tracker.utils.formatter import print_expenses
+from expense_tracker.utils.validation import validate_date, validate_amount
+
 
 def main():
 

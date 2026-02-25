@@ -3,7 +3,7 @@ import json
 
 from pathlib import Path
 
-from models.expense import Expense
+from expense_tracker.models.expense import Expense
 
 class ExpenseStorage:
 

@@ -1,6 +1,6 @@
 from datetime import date
 
-from utils.validation import validate_amount, validate_date
+from expense_tracker.utils.validation import validate_amount, validate_date
 
 class Expense:
     def __init__(self, amount:float, date:date, category:str, description:str) -> None:

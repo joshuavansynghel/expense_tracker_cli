@@ -1,5 +1,5 @@
-from models.expense import Expense
-from storage.expense_storage import ExpenseStorage
+from expense_tracker.models.expense import Expense
+from expense_tracker.storage.expense_storage import ExpenseStorage
 
 
 class ExpenseService:
