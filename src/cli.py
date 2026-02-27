@@ -2,12 +2,54 @@ from expense_tracker.services.expense_service import ExpenseService
 from expense_tracker.utils.formatter import print_expenses
 from expense_tracker.utils.validation import validate_date, validate_amount
 
+def handle_add(service):
+    amount_text = input("Amount (EUR): ")
+    amount = validate_amount(amount_text)
+
+    date_text = input("Date (YYYY-MM-DD): ")
+    dt = validate_date(date_text)
+
+    category = input("Category: ")
+    description = input("Description: ")
+
+    service.add_expense(amount, dt, category, description)
+    print("Expense succesfully added.\n")
+
+def handle_view(service):
+    expenses = service.get_expenses()
+    if not expenses:
+        print(f"\nNo expenses recorded yet.\n")
+    print_expenses(expenses)
+
+def handle_filter(service):
+    category = input("Category to filter: ")
+
+    filtered = service.filter_expenses(category)
+    if not filtered:
+        print(f"\nNo expenses recorded yet.\n")
+    print_expenses(filtered)
+
+def handle_summary(service):
+    category = input("Choose a category to filter on: ")
+
+    filtered = service.filter_expenses(category)
+    total = service.calculate_summary(filtered)
+
+    print(f"\nTotal spent on {category}: {total} EUR.\n")
+
+commands = {
+    'add': handle_add,
+    'view': handle_view,
+    'filter': handle_filter,
+    'summary': handle_summary
+}
+
 
 def main():
 
     print("Expense tracker running.")
 
-    expense_service = ExpenseService()
+    service = ExpenseService()
 
     while True:
         print("\nWhat would you like to do?\n")
@@ -21,34 +63,13 @@ def main():
 
         match choice:
             case "add":
-                # Ask user for input and validate 
-                amount_text = input("What is the amount of the expense in euros?: ")
-                amount = validate_amount(amount_text)
-
-                date_text = input("What is the date of the expense?: ")
-                dt = validate_date(date_text)
-
-                category_text = input("What is the category of the expense?: ")
-                description_text = input("What is the description of the expense?: ")
-
-                expense_service.add_expense(amount, dt, category_text, description_text)
-
+                handle_add(service)
             case "view":
-                print_expenses(expense_service.get_expenses())
-
+                handle_view(service)
             case "filter":
-                category_choice = input("Choose a category to filter on: ")
-
-                filtered_expenses = expense_service.filter_expenses(category_choice)
-                print_expenses(filtered_expenses)
-
+                handle_filter(service)
             case "summary":
-                category_choice = input("Choose a category to filter on: ")
-
-                filtered_expenses = expense_service.filter_expenses(category_choice)
-                total = expense_service.calculate_summary(filtered_expenses)
-                
-                print(f"You've spent a total of €{total} on {category_choice}.")
+                handle_summary(service)
             case "quit":
                 return
 

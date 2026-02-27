@@ -1,9 +1,4 @@
 def print_expenses(expenses):
-    # Check if expenses is not empty
-    if not expenses:
-        print("No expenses have been added yet")
-        return
-
     # Format header
     print(f"{'DATE':<12} | {'AMOUNT':>10} | {'CATEGORY':<15} | DESCRIPTION")
     print("-" * 70)

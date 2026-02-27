@@ -1,9 +1,8 @@
-from datetime import datetime
+from datetime import datetime, date
 
 def validate_date(date_text):
     try:
-        dt = datetime.strptime(date_text, '%Y-%m-%d')
-        return dt
+        return date.fromisoformat(date_text)
     except ValueError:
         raise ValueError("Incorrect date format, should be YYYY-MM-DD")
     
