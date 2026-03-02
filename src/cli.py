@@ -1,3 +1,5 @@
+import sys
+
 from expense_tracker.services.expense_service import ExpenseService
 from expense_tracker.utils.formatter import print_expenses
 from expense_tracker.utils.validation import validate_date, validate_amount
@@ -41,7 +43,7 @@ commands = {
     'add': handle_add,
     'view': handle_view,
     'filter': handle_filter,
-    'summary': handle_summary
+    'summary': handle_summary,
 }
 
 
@@ -61,17 +63,14 @@ def main():
             "Type 'quit' to quit the application\n"
         )
 
-        match choice:
-            case "add":
-                handle_add(service)
-            case "view":
-                handle_view(service)
-            case "filter":
-                handle_filter(service)
-            case "summary":
-                handle_summary(service)
-            case "quit":
-                return
+        handler = commands.get(choice)
+
+        if handler:
+            handler(service)
+        elif choice == 'quit':
+            sys.exit(0)
+        else:
+            print(f"'{choice}' is not a valid command.")
 
 
 if __name__ == '__main__':
