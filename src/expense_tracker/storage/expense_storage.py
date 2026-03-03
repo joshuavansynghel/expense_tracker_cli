@@ -7,14 +7,14 @@ from expense_tracker.models.expense import Expense
 
 class ExpenseStorage:
 
-    def __init__(self, file_path="data/expenses.json"):
-        self.file_path = Path(file_path)
+    def __init__(self, data_file: Path):
+        self.data_file = data_file
 
     def store_expenses(self, expenses):
          # Ensure directory exists
-         self.file_path.parent.mkdir(parents=True, exist_ok=True)
+         self.data_file.parent.mkdir(parents=True, exist_ok=True)
 
-         with self.file_path.open("w") as f:
+         with self.data_file.open("w") as f:
              json.dump(
                 [Expense.to_dict(e) for e in expenses], 
                 f,
@@ -27,7 +27,7 @@ class ExpenseStorage:
             default = []
 
         try:
-            with self.file_path.open("r") as f:
+            with self.data_file.open("r") as f:
                 data =  json.load(f)
             
             return [Expense.from_dict(d) for d in data]

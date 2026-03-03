@@ -1,11 +1,12 @@
 from expense_tracker.models.expense import Expense
 from expense_tracker.storage.expense_storage import ExpenseStorage
+from expense_tracker.config.settings import EXPENSES_PATH
 
 
 class ExpenseService:
 
     def __init__(self, expense_storage=None):
-        self.expense_storage = expense_storage or ExpenseStorage()
+        self.expense_storage = expense_storage or ExpenseStorage(EXPENSES_PATH)
         self.expenses = self.expense_storage.load_expenses()
 
 

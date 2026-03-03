@@ -29,7 +29,8 @@ def handle_filter(service):
     filtered = service.filter_expenses(category)
     if not filtered:
         print(f"\nNo expenses recorded yet.\n")
-    print_expenses(filtered)
+    else:
+        print_expenses(filtered)
 
 def handle_summary(service):
     category = input("Choose a category to filter on: ")
