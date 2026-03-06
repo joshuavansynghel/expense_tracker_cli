@@ -1,9 +1,15 @@
+import itertools
+
 from datetime import date
 
 from expense_tracker.utils.validation import validate_amount, validate_date
 
 class Expense:
+
+    id_iter = itertools.count()
+
     def __init__(self, amount:float, date:date, category:str, description:str) -> None:
+        self.id = next(Expense.id_iter)
         self.amount = amount
         self.date = date
         self.category = category
@@ -12,6 +18,7 @@ class Expense:
 
     def to_dict(self):
         return {
+            'id': self.id,
             'amount': self.amount,
             'date': self.date.isoformat(),
             'category': self.category,
@@ -26,7 +33,3 @@ class Expense:
             dict['category'],
             dict['description']
         )
-
-
-    def __str__(self):
-        return f'{self.date} | €{self.amount:.2f} | {self.category} | {self.description}'

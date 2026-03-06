@@ -1,26 +1,44 @@
 [
     {
+        "id": 0,
         "amount": 150.0,
         "date": "2025-05-02",
         "category": "Entertainment",
         "description": "Playstation subscription"
     },
     {
+        "id": 1,
         "amount": 50.0,
         "date": "2025-01-16",
         "category": "Groceries",
         "description": "Food"
     },
     {
+        "id": 2,
         "amount": 2.25,
         "date": "2026-02-27",
         "category": "Groceries",
         "description": "Worstenbroodje"
     },
     {
+        "id": 3,
         "amount": 120.0,
         "date": "2026-04-03",
         "category": "Entertainment",
         "description": "Restaurant"
+    },
+    {
+        "id": 4,
+        "amount": 4.0,
+        "date": "2025-05-03",
+        "category": "Entertainment",
+        "description": "Restaurant"
+    },
+    {
+        "id": 5,
+        "amount": 6.8,
+        "date": "2026-03-06",
+        "category": "Groceries",
+        "description": "Sandwich"
     }
 ]

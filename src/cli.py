@@ -2,33 +2,67 @@ import sys
 
 from expense_tracker.services.expense_service import ExpenseService
 from expense_tracker.utils.formatter import print_expenses
-from expense_tracker.utils.validation import validate_date, validate_amount
+from expense_tracker.utils.validation import validate_date, validate_amount, validate_string, validate_id
+
+def prompt_valid_input(prompt, validator):
+    while True:
+        value = input(prompt)
+        try:
+            return validator(value)
+        except ValueError as e:
+            print(e)
 
 def handle_add(service):
-    amount_text = input("Amount (EUR): ")
-    amount = validate_amount(amount_text)
+    amount = prompt_valid_input(
+        "Amount (EUR): ",
+        validate_amount
+    )
 
-    date_text = input("Date (YYYY-MM-DD): ")
-    dt = validate_date(date_text)
+    dt = prompt_valid_input(
+        "Date (YYYY-MM-DD): ",
+        validate_date
+    )
 
-    category = input("Category: ")
-    description = input("Description: ")
+    category = prompt_valid_input(
+        "Category: ",
+        validate_string
+    )
+
+    description = prompt_valid_input(
+        "Description: ",
+        validate_string
+    )
 
     service.add_expense(amount, dt, category, description)
-    print("Expense succesfully added.\n")
+    print("Expense successfully added.\n")
+
+def handle_delete(service):
+    id = prompt_valid_input(
+        "ID: ",
+        validate_id
+    )
+
+    service.delete_expense(id)
+    print("Expense successfully deleted.\n")
 
 def handle_view(service):
     expenses = service.get_expenses()
     if not expenses:
         print(f"\nNo expenses recorded yet.\n")
+        return
     print_expenses(expenses)
 
 def handle_filter(service):
+    category = prompt_valid_input(
+        "Category to filter: ",
+        validate_string
+    )
+
     category = input("Category to filter: ")
 
     filtered = service.filter_expenses(category)
     if not filtered:
-        print(f"\nNo expenses recorded yet.\n")
+        print(f"\nNo expenses recorded yet for the category '{category}' yet.\n")
     else:
         print_expenses(filtered)
 
@@ -42,6 +76,7 @@ def handle_summary(service):
 
 commands = {
     'add': handle_add,
+    'delete': handle_delete,
     'view': handle_view,
     'filter': handle_filter,
     'summary': handle_summary,
@@ -58,19 +93,20 @@ def main():
         print("\nWhat would you like to do?\n")
         choice = input(
             "Type 'add' to add an expense\n"
+            "Type 'delete' to delete an expense\n"
             "Type 'view' to view all expenses\n"
             "Type 'filter' to filter on specific expenses\n"
             "Type 'summary' to generate a summary for a specific category\n"
             "Type 'quit' to quit the application\n"
-        )
+        ).strip().lower()
 
-        handler = commands.get(choice)
-
-        if handler:
-            handler(service)
-        elif choice == 'quit':
+        if choice == 'quit':
             sys.exit(0)
-        else:
+
+        try:
+            handler = commands.get(choice)
+            handler(service)
+        except ValueError:
             print(f"'{choice}' is not a valid command.")
 
 
