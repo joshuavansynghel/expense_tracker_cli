@@ -25,9 +25,13 @@ class ExpenseService:
 
     
     def delete_expense(self, id):
-        # Not happy with this part yet since it doesn't return
-        # True / False based on if the ID was found
-        self.expenses = [e for e in self.expenses if e.id != id]
+        for i, _ in enumerate(self.expenses):
+            if self.expenses[i].id == id:
+                del self.expenses[i]
+                self.expense_storage.store_expenses(self.expenses)
+                return True
+        return False
+
 
 
 

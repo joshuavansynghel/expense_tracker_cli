@@ -34,7 +34,7 @@ def handle_add(service):
     )
 
     service.add_expense(amount, dt, category, description)
-    print("Expense successfully added.\n")
+    print("Expense successfully added.")
 
 def handle_delete(service):
     id = prompt_valid_input(
@@ -43,12 +43,12 @@ def handle_delete(service):
     )
 
     service.delete_expense(id)
-    print("Expense successfully deleted.\n")
+    print("Expense successfully deleted.")
 
 def handle_view(service):
     expenses = service.get_expenses()
     if not expenses:
-        print(f"\nNo expenses recorded yet.\n")
+        print(f"\nNo expenses recorded yet.")
         return
     print_expenses(expenses)
 
@@ -58,11 +58,9 @@ def handle_filter(service):
         validate_string
     )
 
-    category = input("Category to filter: ")
-
     filtered = service.filter_expenses(category)
     if not filtered:
-        print(f"\nNo expenses recorded yet for the category '{category}' yet.\n")
+        print(f"\nNo expenses recorded yet for the category '{category}' yet.")
     else:
         print_expenses(filtered)
 
@@ -72,7 +70,7 @@ def handle_summary(service):
     filtered = service.filter_expenses(category)
     total = service.calculate_summary(filtered)
 
-    print(f"\nTotal spent on {category}: {total} EUR.\n")
+    print(f"\nTotal spent on {category}: {total} EUR.")
 
 commands = {
     'add': handle_add,

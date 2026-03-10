@@ -6,7 +6,7 @@ from expense_tracker.utils.validation import validate_amount, validate_date
 
 class Expense:
 
-    id_iter = itertools.count()
+    id_iter = itertools.count(1)
 
     def __init__(self, amount:float, date:date, category:str, description:str) -> None:
         self.id = next(Expense.id_iter)
