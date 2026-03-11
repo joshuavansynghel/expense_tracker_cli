@@ -1,6 +1,8 @@
 import pytest 
+import itertools
 
 from expense_tracker.services.expense_service import ExpenseService
+from expense_tracker.models.expense import Expense
 from fake_storage import FakeStorage
 
 @pytest.fixture
@@ -25,6 +27,18 @@ def test_add_multiple_expenses(expense_service):
     expense_service.add_expense(40, '2025-08-31', 'Insurance', 'Car insurance')
 
     assert len(expense_service.get_expenses()) == 3
+
+def test_delete_expense(expense_service):
+    # Reset counter
+    Expense.id_iter = itertools.count(1)
+
+    expense_service.add_expense(75, '2025-04-22', 'Entertainment', 'Restaurant')
+    expense_service.add_expense(150, '2026-01-15', 'Groceries', 'Food')
+    expense_service.add_expense(40, '2025-08-31', 'Insurance', 'Car insurance')
+
+    assert expense_service.delete_expense(1)
+    assert len(expense_service.get_expenses()) == 2
+
 
 def test_filter_expenses(expense_service):
     assert expense_service.get_expenses() == []
