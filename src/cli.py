@@ -4,31 +4,38 @@ from expense_tracker.services.expense_service import ExpenseService
 from expense_tracker.utils.formatter import print_expenses
 from expense_tracker.utils.validation import validate_date, validate_amount, validate_string, validate_id
 
-def prompt_valid_input(prompt, validator):
+
+def prompt_input(prompt, validator, default=None):
     while True:
-        value = input(prompt)
+        if default is not None:
+            value = input(f"{prompt} [{default}]: ").strip()
+            if value == "":
+                return default
+        else:
+            value = input(prompt).strip()
+
         try:
             return validator(value)
         except ValueError as e:
             print(e)
 
 def handle_add(service):
-    amount = prompt_valid_input(
+    amount = prompt_input(
         "Amount (EUR): ",
         validate_amount
     )
 
-    dt = prompt_valid_input(
+    dt = prompt_input(
         "Date (YYYY-MM-DD): ",
         validate_date
     )
 
-    category = prompt_valid_input(
+    category = prompt_input(
         "Category: ",
         validate_string
     )
 
-    description = prompt_valid_input(
+    description = prompt_input(
         "Description: ",
         validate_string
     )
@@ -36,14 +43,51 @@ def handle_add(service):
     service.add_expense(amount, dt, category, description)
     print("Expense successfully added.")
 
+
+def handle_edit(service):
+    id = prompt_input(
+        "ID: ",
+        validate_id
+    )
+
+    expense = service.get_expense(id)
+
+    amount = prompt_input(
+        "Amount (EUR): ",
+        validate_amount,
+        expense.amount
+    )
+
+    dt = prompt_input(
+        "Date (YYYY-MM-DD): ",
+        validate_date,
+        expense.date
+    )
+
+    category = prompt_input(
+        "Category: ",
+        validate_string,
+        expense.category
+    )
+
+    description = prompt_input(
+        "Description: ",
+        validate_string,
+        expense.description
+    )
+
+    service.edit_expense(id, amount, dt, category, description)
+    
+
 def handle_delete(service):
-    id = prompt_valid_input(
+    id = prompt_input(
         "ID: ",
         validate_id
     )
 
     service.delete_expense(id)
     print("Expense successfully deleted.")
+
 
 def handle_view(service):
     expenses = service.get_expenses()
@@ -52,17 +96,20 @@ def handle_view(service):
         return
     print_expenses(expenses)
 
+
 def handle_filter(service):
-    category = prompt_valid_input(
+    category = prompt_input(
         "Category to filter: ",
         validate_string
     )
 
     filtered = service.filter_expenses(category)
+
     if not filtered:
         print(f"\nNo expenses recorded yet for the category '{category}' yet.")
     else:
         print_expenses(filtered)
+
 
 def handle_summary(service):
     category = input("Choose a category to filter on: ")
@@ -74,6 +121,7 @@ def handle_summary(service):
 
 commands = {
     'add': handle_add,
+    'edit': handle_edit,
     'delete': handle_delete,
     'view': handle_view,
     'filter': handle_filter,
@@ -91,6 +139,7 @@ def main():
         print("\nWhat would you like to do?\n")
         choice = input(
             "Type 'add' to add an expense\n"
+            "Type 'edit' to edit an expense\n"
             "Type 'delete' to delete an expense\n"
             "Type 'view' to view all expenses\n"
             "Type 'filter' to filter on specific expenses\n"

@@ -9,10 +9,17 @@ class ExpenseService:
         self.expense_storage = expense_storage or ExpenseStorage(EXPENSES_PATH)
         self.expenses = self.expense_storage.load_expenses()
 
+    
+    def find_expense(self, id):
+        for expense in self.expenses:
+            if expense.id == id:
+                return expense
+        return None
+
 
     def get_expenses(self):
         return self.expenses
-
+    
 
     def add_expense(self, amount, date, category, description):
     
@@ -24,15 +31,25 @@ class ExpenseService:
         self.expense_storage.store_expenses(self.expenses)
 
     
+    def edit_expense(self, id, amount, date, category, description):
+        expense = self.find_expense(id)
+        if expense is None:
+            return False
+        else:
+            expense.amount = amount
+            expense.date = date
+            expense.category = category
+            expense.description = description
+
+            self.expense_storage.store_expenses(self.expenses)
+
+    
     def delete_expense(self, id):
-        for i, _ in enumerate(self.expenses):
-            if self.expenses[i].id == id:
-                del self.expenses[i]
-                self.expense_storage.store_expenses(self.expenses)
-                return True
-        return False
-
-
+        expense = self.find_expense(id)
+        if expense is None:
+            return False
+        else:
+            self.expenses.remove(expense)
 
 
     def filter_expenses(self, category):
