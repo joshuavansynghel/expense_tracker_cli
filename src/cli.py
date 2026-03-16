@@ -45,12 +45,12 @@ def handle_add(service):
 
 
 def handle_edit(service):
-    id = prompt_input(
+    expense_id = prompt_input(
         "ID: ",
         validate_id
     )
 
-    expense = service.get_expense(id)
+    expense = service.find_expense(expense_id)
 
     amount = prompt_input(
         "Amount (EUR): ",
@@ -76,17 +76,26 @@ def handle_edit(service):
         expense.description
     )
 
-    service.edit_expense(id, amount, dt, category, description)
+    service.edit_expense(expense_id, amount, dt, category, description)
     
 
 def handle_delete(service):
-    id = prompt_input(
+    expense_id = prompt_input(
         "ID: ",
         validate_id
     )
 
-    service.delete_expense(id)
-    print("Expense successfully deleted.")
+    expense = service.find(expense_id)
+
+    confirm = input(
+        f"Are you sure you want to delete this expense? (y/n)"
+        f"{expense.id} | {expense.amount} | {expense.date} | "
+        f"{expense.category} | {expense.description}"
+    )
+
+    if confirm == "y":
+        service.delete_expense(expense_id)
+        print("Expense successfully deleted.")
 
 
 def handle_view(service):

@@ -10,15 +10,15 @@ class ExpenseService:
         self.expenses = self.expense_storage.load_expenses()
 
     
-    def find_expense(self, id):
+    def find_expense(self, expense_id):
         for expense in self.expenses:
-            if expense.id == id:
+            if expense.id == expense_id:
                 return expense
         return None
 
 
     def get_expenses(self):
-        return self.expenses
+        return self.expenses.copy()
     
 
     def add_expense(self, amount, date, category, description):
@@ -31,11 +31,10 @@ class ExpenseService:
         self.expense_storage.store_expenses(self.expenses)
 
     
-    def edit_expense(self, id, amount, date, category, description):
-        expense = self.find_expense(id)
-        if expense is None:
-            return False
-        else:
+    def edit_expense(self, expense_id, amount, date, category, description):
+        expense = self.find_expense(expense_id)
+
+        if expense:
             expense.amount = amount
             expense.date = date
             expense.category = category
@@ -43,23 +42,23 @@ class ExpenseService:
 
             self.expense_storage.store_expenses(self.expenses)
 
-    
-    def delete_expense(self, id):
-        expense = self.find_expense(id)
-        if expense is None:
-            return False
+            return expense
         else:
+            return None
+
+    
+    def delete_expense(self, expense_id):
+        expense = self.find_expense(expense_id)
+        if expense:
             self.expenses.remove(expense)
+            self.expense_storage.store_expenses(self.expenses)
+            return expense
+        else:
+            return None
 
 
     def filter_expenses(self, category):
-        filtered_expenses = []
-
-        for expense in self.expenses:
-            if expense.category == category:
-                filtered_expenses.append(expense)
-
-        return filtered_expenses
+        return [e for e in self.expenses if e.category == category]
 
 
     def calculate_summary(self, expenses):
