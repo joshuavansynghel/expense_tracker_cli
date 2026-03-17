@@ -52,6 +52,10 @@ def handle_edit(service):
 
     expense = service.find_expense(expense_id)
 
+    if not expense:
+        print(f"No expense found with ID: {expense_id}")
+        return
+
     amount = prompt_input(
         "Amount (EUR): ",
         validate_amount,
@@ -85,12 +89,16 @@ def handle_delete(service):
         validate_id
     )
 
-    expense = service.find(expense_id)
+    expense = service.find_expense(expense_id)
+
+    if not expense:
+        print(f"No expense found with ID: {expense_id}")
+        return
 
     confirm = input(
-        f"Are you sure you want to delete this expense? (y/n)"
-        f"{expense.id} | {expense.amount} | {expense.date} | "
-        f"{expense.category} | {expense.description}"
+        f"Are you sure you want to delete this expense? (y/n)\n"
+        f"ID: {expense.id} | Amount: EUR {expense.amount} | Date: {expense.date} | "
+        f"Category: {expense.category} | Description: {expense.description}\n"
     )
 
     if confirm == "y":
@@ -162,8 +170,8 @@ def main():
         try:
             handler = commands.get(choice)
             handler(service)
-        except ValueError:
-            print(f"'{choice}' is not a valid command.")
+        except (ValueError, TypeError):
+            print(f"\n'{choice}' is not a valid command.")
 
 
 if __name__ == '__main__':
