@@ -1,7 +1,7 @@
 import sys
 
 from expense_tracker.services.expense_service import ExpenseService
-from expense_tracker.utils.formatter import print_expenses
+from expense_tracker.utils.formatter import print_expenses, print_categories
 from expense_tracker.utils.validation import validate_date, validate_amount, validate_string, validate_id
 
 
@@ -115,6 +115,8 @@ def handle_view(service):
 
 
 def handle_filter(service):
+    print_categories(service.get_categories())
+
     category = prompt_input(
         "Category to filter: ",
         validate_string

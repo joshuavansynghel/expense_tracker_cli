@@ -21,6 +21,13 @@ class ExpenseService:
         return self.expenses.copy()
     
 
+    def get_categories(self):
+        return sorted(list({e.category for e in self.expenses}), key=str.lower)
+    
+    def _save(self):
+        self.expense_storage.store_expenses(self.expenses)
+
+
     def add_expense(self, amount, date, category, description):
     
         # Instantiate expense
@@ -28,7 +35,7 @@ class ExpenseService:
 
         # Store locally and persistent
         self.expenses.append(expense)
-        self.expense_storage.store_expenses(self.expenses)
+        self._save()
 
     
     def edit_expense(self, expense_id, amount, date, category, description):
@@ -40,7 +47,7 @@ class ExpenseService:
             expense.category = category
             expense.description = description
 
-            self.expense_storage.store_expenses(self.expenses)
+            self._save()
 
             return expense
         else:
@@ -51,7 +58,7 @@ class ExpenseService:
         expense = self.find_expense(expense_id)
         if expense:
             self.expenses.remove(expense)
-            self.expense_storage.store_expenses(self.expenses)
+            self._save()
             return expense
         else:
             return None

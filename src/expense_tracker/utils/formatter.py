@@ -19,3 +19,7 @@ def print_expenses(expenses):
             f"{expense.category:<15} | "
             f"{expense.description}"
         )
+
+def print_categories(categories):
+    print("\nAvailable categories: ")
+    print("\n".join(categories))
